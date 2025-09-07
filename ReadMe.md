@@ -44,11 +44,20 @@ is far better to use for compilation of eBPF code.
 > WSL does not ship linux headers by default (like asm types and all), Need to follow below steps to make it work (Compile it successfully)
 
 ```code
+# The steps are just to clone WSL linux kernel and build some utils to help eBPF tool
 sudo apt update && sudo apt install -y build-essential flex bison libssl-dev libelf-dev bc python3 pahole cpio
+# Some clone and build tools
+sudo apt install git clang llvm
+
 git clone https://github.com/microsoft/WSL2-Linux-Kernel.git --single-branch --depth 1
 cd WSL2-Linux-Kernel
 sudo make headers_install
 ls -l /usr/include/linux/version.h
 
+# You also need to build bpftool
+make -C tools/bpf/bpftool
+sudo cp tools/bpf/bpftool/bpftool /usr/local/sbin/
+sudo ln -s /usr/local/sbin/bpftool /usr/sbin/bpftool
+bpftool version
 # You can do a custom kernel install, but thats too much, delete the repo since it covers a lot of space.
 ```
