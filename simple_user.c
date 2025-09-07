@@ -22,14 +22,16 @@ int main(int argc, char **argv){
     // Load BPF program
     skel = simple_bpf__open_and_load();
     if (!skel){
-        fprintf(stderr, "Failed to open and load BPF skeleton");
+        fprintf(stderr, "Failed to open and load BPF skeleton\n");
         return 1;
     }
 
     // Attach the BPF program to its tracepoint
     err = simple_bpf__attach(skel);
     if (err){
-        fprintf(stderr, "Failed to attach BPF skeleton");
+        fprintf(stderr, "Failed to attach BPF skeleton\n");
+        simple_bpf__destroy(skel);
+        return 1;
     }
 
     printf("Successfully started! waiting for events, Do a ctrl+C to exit\n");
@@ -38,7 +40,6 @@ int main(int argc, char **argv){
         sleep(1);
     }
 
-    cleanup:
-        simple_bpf__destroy(skel);
-        return err < 0 ? -err : 0;
+    simple_bpf__destroy(skel);
+    return 0;
 }

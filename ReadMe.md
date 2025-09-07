@@ -39,4 +39,16 @@ is far better to use for compilation of eBPF code.
 
 > Another is a lightweight eBPF program and python use case (just a mixture)
 
-Thanks 
+## Special flow for WSL
+
+> WSL does not ship linux headers by default (like asm types and all), Need to follow below steps to make it work (Compile it successfully)
+
+```code
+sudo apt update && sudo apt install -y build-essential flex bison libssl-dev libelf-dev bc python3 pahole cpio
+git clone https://github.com/microsoft/WSL2-Linux-Kernel.git --single-branch --depth 1
+cd WSL2-Linux-Kernel
+sudo make headers_install
+ls -l /usr/include/linux/version.h
+
+# You can do a custom kernel install, but thats too much, delete the repo since it covers a lot of space.
+```
